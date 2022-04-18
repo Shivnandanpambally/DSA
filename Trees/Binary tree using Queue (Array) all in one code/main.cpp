@@ -167,6 +167,10 @@ public:
     void levelorder(Node<T> *p);
     int height(Node<T> *p);
     int count(Node<T>*p);
+    int count_0(Node<T>*p);//Number of nodes with degree 0
+    int count_1(Node<T>*p);//Number of nodes with degree 1
+    int count_2(Node<T>*p);//Number of nodes with degree 2
+    int count_12(Node<T>*p);//Number of nodes with degree 1 or 2
 };
 
 template <class T>
@@ -334,6 +338,54 @@ int Binary_tree<T>::count(Node<T>*p){
     else
         return 0;
 }
+
+template<class T>
+int Binary_tree<T>::count_0(Node<T>*p){
+    if(!p)
+        return 0;
+    else{
+        if(!p->lchild  && !p->rchild)
+            return count_0(p->lchild)+count_0(p->rchild)+1;
+        else
+            return count_0(p->lchild)+count_0(p->rchild);
+    }
+}
+
+template<class T>
+int Binary_tree<T>::count_1(Node<T>*p){
+    if(!p)
+        return 0;
+    else{
+        if((!p->lchild && p->rchild) || (p->lchild && !p->rchild))
+            return count_1(p->lchild)+count_1(p->rchild)+1;
+        else
+            return count_1(p->lchild)+count_1(p->rchild);
+    }
+}
+
+template<class T>
+int Binary_tree<T>::count_2(Node<T>*p){
+    if(!p)
+        return 0;
+    else{
+        if(p->lchild  && p->rchild)
+            return count_2(p->lchild)+count_2(p->rchild)+1;
+        else
+            return count_2(p->lchild)+count_2(p->rchild);
+    }
+}
+
+template<class T>
+int Binary_tree<T>::count_12(Node<T>*p){
+    if(!p)
+        return 0;
+    else{
+        if(p->lchild  || p->rchild)
+            return count_12(p->lchild)+count_12(p->rchild)+1;
+        else
+            return count_12(p->lchild)+count_12(p->rchild);
+    }
+}
     
 //*******************************************************************************************************//Binary_tree part over
 
@@ -375,6 +427,22 @@ int main()
     cout<<endl;
     cout<<"Number of nodes in the tree: ";
     cout<<T.count(T.root);
+    cout<<endl;
+    
+    cout<<"Number of nodes with degree 0: ";
+    cout<<T.count_0(T.root);
+    cout<<endl;
+    
+    cout<<"Number of nodes with degree 1: ";
+    cout<<T.count_1(T.root);
+    cout<<endl;
+    
+    cout<<"Number of nodes with degree 2: ";
+    cout<<T.count_2(T.root);
+    cout<<endl;
+    
+    cout<<"Number of nodes with degree 1 or 2: ";
+    cout<<T.count_12(T.root);
     cout<<endl;
    
     return 0;
