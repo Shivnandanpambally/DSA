@@ -18,6 +18,7 @@ public:
     void Ipostorder(Node<T> *p);
     void levelorder(Node<T> *p);
     int height(Node<T> *p);
+    int count(Node<T>*p);
 };
 
 template <class T>
@@ -177,6 +178,14 @@ int Binary_tree<T>::height(Node<T> *p){
     else
         return y+1;
 } 
+
+template <class T>
+int Binary_tree<T>::count(Node<T>*p){
+    if(p)
+        return count(p->lchild)+count(p->rchild)+1;
+    else
+        return 0;
+}
     
 //*******************************************************************************************************//Binary_tree part over
 
@@ -215,6 +224,9 @@ int main()
     cout<<endl;
     cout<<"Height of the tree: ";
     cout<<T.height(T.root);
+    cout<<endl;
+    cout<<"Number of nodes in the tree: ";
+    cout<<T.count(T.root);
     cout<<endl;
    
     return 0;
