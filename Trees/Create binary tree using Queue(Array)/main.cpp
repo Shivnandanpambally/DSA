@@ -10,8 +10,73 @@ public:
     Node<T> *rchild;
 };
 
-//*******************************************************************************************************//
+//*******************************************************************************************************//Node part over
 
+template <class T>
+class stack
+{
+private:
+    T size;
+    T top;
+    Node<T> **S;
+public:
+    stack();
+    stack(T x);
+    ~stack();
+    void Push(Node<T>* x);
+    Node<T>* Pop();
+    int isEmpty();
+};
+
+template <class T>
+stack<T>::stack(){
+    size=0;
+    top=-1;
+}
+
+template <class T>
+stack<T>::stack(T x){
+    size=x;
+    top=-1;
+    S=new Node<T>* [size];
+}
+
+template <class T>
+stack<T>::~stack(){
+    delete []S;
+}
+
+template <class T>
+void stack<T>::Push(Node<T>* x)
+{
+    if(top==size-1)
+        cout<<"\nstack overflow\n";
+    else
+    {
+        top++;
+        S[top]=x;
+    }
+}
+
+template <class T>
+Node<T>*stack<T>::Pop()
+{
+    Node<T>* x=NULL;
+    if(top == -1)
+        cout<<"\nStack underflow";
+    else{
+        x=S[top];
+        top--;
+    }
+    return x;
+}
+
+template <class T>
+int stack<T>::isEmpty(){
+    return (top==-1)? 1:0;
+}
+
+//*******************************************************************************************************//stack part over
 template <class T>
 class Queue
 {   
@@ -84,7 +149,7 @@ int Queue<T>::isEmpty(){
     return (front==rear)? 1:0;
 }
 
-//*******************************************************************************************************//
+//*******************************************************************************************************//Queue part over
 
 template <class T>
 class Binary_tree{
@@ -96,6 +161,9 @@ public:
     void preorder(Node<T> *p);
     void inorder(Node<T> *p);
     void postorder(Node<T> *p);
+    void Ipreorder(Node<T> *p);
+    void Iinorder(Node<T> *p);
+    void Ipostorder(Node<T> *p);
     void levelorder(Node<T> *p);
     int height(Node<T> *p);
 };
@@ -146,6 +214,22 @@ void Binary_tree<T>::creat(){
 } 
 
 template <class T>
+void Binary_tree<T>::Ipreorder(Node<T> *p){
+    stack<T> S(10);
+    while(p!=NULL || !S.isEmpty()){
+        if(p!=NULL){
+            cout<<p->data<<" ";
+            S.Push(p);
+            p=p->lchild;
+        }
+        else{
+            p=S.Pop();
+            p=p->rchild;
+        }
+    }
+}
+
+template <class T>
 void Binary_tree<T>::preorder(Node<T> *p){
     if(p){
         cout<<p->data<<" ";
@@ -169,6 +253,45 @@ void Binary_tree<T>::postorder(Node<T> *p){
         postorder(p->lchild);
         postorder(p->rchild);
         cout<<p->data<<" ";
+    }
+}
+
+template <class T>
+void Binary_tree<T>::Iinorder(Node<T> *p){
+    stack<T> S(10);
+    while(p!=NULL || !S.isEmpty()){
+        if(p!=NULL){
+            S.Push(p);
+            p=p->lchild;
+        }
+        else{
+            p=S.Pop();
+            cout<<p->data<<" ";
+            p=p->rchild;
+        }
+    }
+}
+
+template <class T>
+void Binary_tree<T>::Ipostorder(Node<T> *p){
+    stack<T> S(10);
+    long long int temp;
+    while(p!=NULL || !S.isEmpty()){
+        if(p!=NULL){
+            S.Push(p);
+            p=p->lchild;
+        }
+        else{
+            temp=(long long int)(S.Pop());
+            if(temp>0){
+                S.Push((Node<T>*)(-temp));
+                p=((Node<T>*)temp)->rchild;
+            }
+            else{
+                cout<<((Node<T>*)(-temp))->data<<" ";
+                p=NULL;
+            }
+        }
     }
 }
 
@@ -201,24 +324,50 @@ int Binary_tree<T>::height(Node<T> *p){
         return x+1;
     else
         return y+1;
-}
+} 
     
+//*******************************************************************************************************//Binary_tree part over
 
 int main()
 {  
     Binary_tree<int> T;
     T.creat();
    
+    cout<<endl<<endl;
+    cout<<"Recursive"<<endl;
+    cout<<"Preorder arrangement: "; 
     T.preorder(T.root);
     cout<<endl;
+    cout<<"inorder arrangement: ";
     T.inorder(T.root);
     cout<<endl;
+    cout<<"Postorder arrangement: ";
     T.postorder(T.root);
     cout<<endl;
+    cout<<endl<<endl;
+    
+    cout<<"Iterative"<<endl;
+    cout<<"Preorder arrangement: "; 
+    T.Ipreorder(T.root);
+    cout<<endl;
+    cout<<"inorder arrangement: ";
+    T.Iinorder(T.root);
+    cout<<endl;
+    cout<<"Postorder arrangement: ";
+    T.Ipostorder(T.root);
+    cout<<endl;
+    cout<<endl<<endl;
+    
+    cout<<"Levelorder arrangement: ";
     T.levelorder(T.root);
     cout<<endl;
+    cout<<"Height of the tree: ";
     cout<<T.height(T.root);
     cout<<endl;
    
     return 0;
 }
+
+
+
+
