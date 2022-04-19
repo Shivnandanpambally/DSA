@@ -157,6 +157,7 @@ public:
     Node<T> *root;
     Binary_tree();
     ~Binary_tree();
+    void destroy(Node<T>* p);
     void creat();
     void preorder(Node<T> *p);
     void inorder(Node<T> *p);
@@ -180,7 +181,16 @@ Binary_tree<T>::Binary_tree(){
 
 template <class T>
 Binary_tree<T>::~Binary_tree(){
-    delete root;
+    destroy(root);
+}
+
+template <class T>
+void Binary_tree<T>::destroy(Node<T>* p){
+    if (p != NULL) {
+        destroy(p->lchild);
+        destroy(p->rchild);
+        delete p;
+    }
 }
 
 template <class T>
